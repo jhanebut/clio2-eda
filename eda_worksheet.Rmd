@@ -14,9 +14,69 @@ Read in the data
 ```{r}
 library(tidyverse)
 
-religious_1936_census <- read_csv("us_religious_census_1936_by_county.csv")
+abcfm_missionaries <-
+  read_csv("abcfm_missionaries_1.csv") 
 
-view(religious_1936_census)
+abcfm_missionaries
+
+ncol(abcfm_missionaries) 
+   #1920 rows matches the number of rows in the original data.
+ 
+ nrow(abcfm_missionaries)
+#14 columns does not match the original data frame but is fine since the last columns do not have data.
+  
+  str(abcfm_missionaries)
+
+abcfm_missionaries %>% 
+  arrange(mission_name) 
+ 
+  
+#There are 20 different mission stations within the ABCFM and various stations within those stations.
+
+abcfm_micronesia <-
+abcfm_missionaries %>% 
+  filter(mission_name == "micronesia")
+
+abcfm_missionaries_women <- 
+  abcfm_missionaries %>% 
+  filter(title_in_report == "mrs" | title_in_report == "miss")
+
+abcfm_missionaries_women
+
+```
+
+```{r}
+abcfm_missionaries %>% 
+  filter( MD == TRUE) %>% 
+  nrow() %>% 
+  print()
+
+abcfm_missionaries_women %>% 
+  filter(MD == TRUE) 
+  
+
+
+# There were 16 female doctors total and 87 doctors total in the ABCFM. 
+
+
+# Females comprised 18.4 percent of the ABCFM medical professionals.
+
+
+abcfm_missionaries_women
+
+abcfm_missionaries_native <- 
+  abcfm_missionaries %>% 
+  filter(title_in_report == "native pastor")
+
+abcfm_missionaries_native
+
+```
+
+
+```{r}
+ggplot(abcfm_missionaries, aes(Report_year)) + geom_histogram()
+
+#The histogram above only displays that the number of missionaries increased over this four year period.
 ```
 
 ## Including Plots
@@ -24,7 +84,33 @@ view(religious_1936_census)
 You can also embed plots, for example:
 
 ```{r pressure, echo=FALSE}
-plot(pressure)
+ggplot(abcfm_micronesia, aes(x = Report_year )) + geom_bar()
+
+
+ggplot(abcfm_missionaries, aes(Report_year))+geom_bar()
+
+ggplot(abcfm_missionaries_women, aes(Report_year))+ geom_bar()
+
+abcfm_missionaries %>% 
+  group_by(Report_year) %>%
+ggplot( aes(mission_name))+geom_bar() + coord_flip()
 ```
+
+# The above plot shows the total number of persons associated with each mission from 1884-1887. An interesting feature of the above graphs is that the total number of missionaries associated with Turkey far exceeded the number of missionaries associated with any other geographic region.
+
+
+``` {r}
+ggplot(abcfm_missionaries_native, aes(Report_year))+ geom_bar()
+```
+
+#The plot above shows the number of native pastors named in ABCFM annual reports.
+
+#Overall, the data has a few major problems. It is not tidy enough and I need to add gender as a variable. It is also tricky to plot data for each specific mission for each year, which is a problem that will need to be resolved before any further analysis can move forward.
+
+
+
+# This plot shows that my data is not very tidy.
+```
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
