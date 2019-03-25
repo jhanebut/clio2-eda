@@ -15,7 +15,7 @@ Read in the data
 library(tidyverse)
 
 abcfm_missionaries <-
-  read_csv("abcfm_missionaries_1.csv") 
+  read_csv("abcfm_missionaries1.csv") 
 
 abcfm_missionaries
 
@@ -28,20 +28,27 @@ ncol(abcfm_missionaries)
   str(abcfm_missionaries)
 
 abcfm_missionaries %>% 
-  arrange(mission_name) 
+select(mission_name) %>% 
+  unique()
  
+abcfm_missionaries %>% 
+  select(title_in_report) %>% 
+  unique()
   
-#There are 20 different mission stations within the ABCFM and various stations within those stations.
+#There are 20 different mission stations within the ABCFM and various stations within those stations. Five in the file are minorly altered from uniform spellings and will need to be changed.
+
 
 abcfm_micronesia <-
 abcfm_missionaries %>% 
-  filter(mission_name == "micronesia")
+  filter(mission_name == "Micronesia")
 
 abcfm_missionaries_women <- 
   abcfm_missionaries %>% 
   filter(title_in_report == "mrs" | title_in_report == "miss")
 
 abcfm_missionaries_women
+
+#1065 of the 1920 total rows represent female mission workers proving that the field was rather equitable.
 
 ```
 
@@ -64,11 +71,15 @@ abcfm_missionaries_women %>%
 
 abcfm_missionaries_women
 
+
+
 abcfm_missionaries_native <- 
   abcfm_missionaries %>% 
   filter(title_in_report == "native pastor")
 
 abcfm_missionaries_native
+
+# the number of native workers named in the annual reports represents 1/19 of the total workforce and could receive further analysis
 
 ```
 
@@ -105,11 +116,10 @@ ggplot(abcfm_missionaries_native, aes(Report_year))+ geom_bar()
 
 #The plot above shows the number of native pastors named in ABCFM annual reports.
 
-#Overall, the data has a few major problems. It is not tidy enough and I need to add gender as a variable. It is also tricky to plot data for each specific mission for each year, which is a problem that will need to be resolved before any further analysis can move forward.
+#Overall, the data has a few major problems. It is not tidy enough and I need to add gender as a variable. It is also tricky to plot data for each specific mission for each year, which is a problem that will need to be resolved before any further analysis can move forward. The lack of continus variables aside from year also presents a problem and it may be beneficial to include total numbers of mission congregations in a separate table to join to this one.
 
 
 
-# This plot shows that my data is not very tidy.
 ```
 
 
